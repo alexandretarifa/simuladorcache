@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Memcached.ClientLibrary;
+using StackExchange.Redis;
+
 
 namespace playground.Model
 {
@@ -51,6 +53,25 @@ namespace playground.Model
                 Conteudo conteudo = new Conteudo().fill().Where(c => c.id == id).Single();
                 cache.Add(id.ToString(), conteudo, DateTime.Now.AddSeconds(30));
                 return conteudo;
+            }
+
+        }
+
+        public String getConteudoComCacheRedis(int id)
+        {
+
+            ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("tdcdemo.redis.cache.windows.net, password=TMO+dDQr6vOTopZ8K6c/wdouDZbOmDvKatbMqxcfVGk=");
+
+            IDatabase cache = connection.GetDatabase();
+
+
+            if (cache.KeyExists(id.ToString()))
+                return cache.StringGet(id.ToString());
+            else
+            {
+                Conteudo conteudo = new Conteudo().fill().Where(c => c.id == id).Single();
+                cache.StringSet(id.ToString(), conteudo.nome, TimeSpan.FromSeconds(20));
+                return conteudo.nome;
             }
 
         }
