@@ -60,8 +60,8 @@ namespace playground.Model
         public String getConteudoComCacheRedis(int id)
         {
 
-            ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("tdcdemo.redis.cache.windows.net, password=TMO+dDQr6vOTopZ8K6c/wdouDZbOmDvKatbMqxcfVGk=");
-
+            ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("tdcdemo.redis.cache.windows.net:6379, password=TMO+dDQr6vOTopZ8K6c/wdouDZbOmDvKatbMqxcfVGk=,ssl=True");
+            
             IDatabase cache = connection.GetDatabase();
 
 
